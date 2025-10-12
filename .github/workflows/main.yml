@@ -1,0 +1,35 @@
+name: Auto Unzip Iqra Islamic Wisdom App
+
+on:
+  push:
+    paths:
+      - "Iqra_Islamic_Wisdom.zip"
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install unzip tool
+        run: sudo apt-get install unzip -y
+
+      - name: Unzip the uploaded file
+        run: |
+          unzip -o Iqra_Islamic_Wisdom.zip -d extracted_app
+          rm Iqra_Islamic_Wisdom.zip
+
+      - name: Move extracted content to root
+        run: |
+          shopt -s dotglob
+          mv extracted_app/* ./
+          rm -rf extracted_app
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-extracted Iqra Islamic Wisdom app from ZIP"
+          git push

@@ -1,0 +1,41 @@
+name: iqra_islamic_wisdom_pro
+description: A comprehensive Islamic Wisdom App with Quran, Hadith, and Knowledge sections.
+publish_to: "none"
+
+version: 3.3.0+3
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  provider: ^6.1.2
+  http: ^1.2.2
+  shared_preferences: ^2.3.2
+  url_launcher: ^6.3.1
+  flutter_svg: ^2.0.10+1
+  path_provider: ^2.1.4
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/quran/
+    - assets/hadith/
+    - assets/images/
+    - assets/fonts/
+
+  fonts:
+    - family: QuranFont
+      fonts:
+        - asset: assets/fonts/UthmanicHafs1.ttf
