@@ -2,34 +2,29 @@ name: Build Flutter APK
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.3" # Stable latest
+          flutter-version: '3.24.3'
 
-      - name: Get Flutter Packages
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Clean Old Builds
-        run: flutter clean
-
-      - name: Build APK
+      - name: Build release APK
         run: flutter build apk --release --no-shrink
 
-      - name: Upload APK Artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Iqra_Islamic_Wisdom_v3.4_Release
+          name: Iqra_Islamic_Wisdom_v3.4
           path: build/app/outputs/flutter-apk/app-release.apk
