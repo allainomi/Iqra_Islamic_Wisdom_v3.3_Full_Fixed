@@ -1,30 +1,17 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.iqra.islamicwisdom"
+    namespace = "com.example.iqraislamicwisdompro"
     compileSdk = 34
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-    sourceSets {
-        getByName("main") {
-            java.srcDirs("src/main/kotlin")
-        }
-    }
+    ndkVersion = "27.0.12077973"
 
     defaultConfig {
-        applicationId = "com.iqra.islamicwisdom"
+        applicationId = "com.example.iqraislamicwisdompro"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
@@ -32,17 +19,5 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-}
-
-flutter {
-    source = "../.."
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-}
