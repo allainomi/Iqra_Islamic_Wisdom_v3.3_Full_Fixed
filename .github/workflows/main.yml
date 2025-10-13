@@ -1,35 +1,37 @@
-name: Auto Unzip Iqra Islamic Wisdom App
+name: Build Flutter APK
 
 on:
   push:
-    paths:
-      - "Iqra_Islamic_Wisdom.zip"
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
-  unzip:
+  build_apk:
+    name: Build APK
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Install unzip tool
-        run: sudo apt-get install unzip -y
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.4'
 
-      - name: Unzip the uploaded file
-        run: |
-          unzip -o Iqra_Islamic_Wisdom.zip -d extracted_app
-          rm Iqra_Islamic_Wisdom.zip
+    - name: Enable Android SDK license accept
+      run: yes | flutter doctor --android-licenses
 
-      - name: Move extracted content to root
-        run: |
-          shopt -s dotglob
-          mv extracted_app/* ./
-          rm -rf extracted_app
+    - name: Get dependencies
+      run: flutter pub get
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Auto-extracted Iqra Islamic Wisdom app from ZIP"
-          git push
+    - name: Build release APK
+      run: flutter build apk --release --no-shrink
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
