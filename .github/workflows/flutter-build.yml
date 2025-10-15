@@ -1,30 +1,35 @@
-name: Build APK
-on: [push]
+name: Build Flutter APK
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Build with Different Method
-        run: |
-          # Temporary directory
-          mkdir /tmp/build_app
-          cd /tmp/build_app
-          
-          # Flutter setup
-          git clone https://github.com/flutter/flutter.git -b stable
-          export PATH="$PATH:/tmp/build_app/flutter/bin"
-          
-          # Project
-          flutter create --platforms android myapp
-          cd myapp
-          
-          # Debug build (lightweight)
-          flutter build apk --debug
-        
-      - name: Upload Debug APK
+      # Step 1: Repository checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      # Step 3: Get dependencies
+      - name: Get dependencies
+        run: flutter pub get
+
+      # Step 4: Build release APK
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Step 5: Upload artifact
+      - name: Upload release APK
         uses: actions/upload-artifact@v4
         with:
-          name: debug-app
-          path: /tmp/build_app/myapp/build/app/outputs/flutter-apk/app-debug.apk
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
