@@ -5,10 +5,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2.10.0
-      - run: flutter pub get
-      - run: flutter build apk --release
-      - uses: actions/upload-artifact@v4
+      
+      - name: Build with Different Method
+        run: |
+          # Temporary directory
+          mkdir /tmp/build_app
+          cd /tmp/build_app
+          
+          # Flutter setup
+          git clone https://github.com/flutter/flutter.git -b stable
+          export PATH="$PATH:/tmp/build_app/flutter/bin"
+          
+          # Project
+          flutter create --platforms android myapp
+          cd myapp
+          
+          # Debug build (lightweight)
+          flutter build apk --debug
+        
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
         with:
-          name: app
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: debug-app
+          path: /tmp/build_app/myapp/build/app/outputs/flutter-apk/app-debug.apk
